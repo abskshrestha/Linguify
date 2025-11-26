@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema({
-  fullname:
-  {
+  // Fixed: Changed fullname to fullName (must match your controller)
+  fullName: {
     type: String,
     required: true,
   },
@@ -38,8 +38,8 @@ const userSchema = new mongoose.Schema({
     default: "",
   },
   isOnBoarded: {
-    type: String,
-    default: "",
+    type: Boolean, // Fixed: Changed from String to Boolean
+    default: false,
   },
   friends: [
     {
@@ -49,25 +49,20 @@ const userSchema = new mongoose.Schema({
   ],
 }, { timestamps: true });
 
-const USer = mongoose.model("User", userSchema);
-
-//todo: explain this once again
+// Fixed: Moved pre-save hook BEFORE model creation
 userSchema.pre("save", async function (next) {
-
   if (!this.isModified("password")) return next();
+  
   try {
-    const salt = await bcrypt.gensalt(10);
+    // Fixed: Changed bcrypt.gensalt to bcrypt.genSalt (capital S)
+    const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
   } catch (error) {
     next(error);
   }
-})
+});
 
-export default UserActivation;
+const User = mongoose.model("User", userSchema);
 
-
-
-
-
-
+export default User;
