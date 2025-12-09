@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema({
   // Fixed: Changed fullname to fullName (must match your controller)
-  fullName: {
+  fullName: { //schema's fields
     type: String,
     required: true,
   },
@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema({
     },
   ],
 }, { timestamps: true });
-
+ 
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();

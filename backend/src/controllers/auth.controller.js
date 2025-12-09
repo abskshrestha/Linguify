@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import { upsertStreamUser } from "../lib/stream.js"; 
 
 export async function signup(req, res) {
   const { email, password, fullName } = req.body;
@@ -26,7 +27,6 @@ export async function signup(req, res) {
       return res.status(400).json({ message: "Email already exists, pls use a diff one" });
     }
 
-
     const idx = Math.floor(Math.random() * 100) + 1; //generate a numbers between 1 and 100
     const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`;
 
@@ -37,10 +37,18 @@ export async function signup(req, res) {
       profilePic: randomAvatar
     })
 
+    try {
+      await upsertStreamUser({
+        id: newUser._id.toString(),
+        name: newUser.fullName,
+        image: newUser.profilePic || "",
+    });
+      console.log(`Stream user created for ${newUser.fullName}`);
+    } catch (error) {
+      console.log("Error Creating Stream User:", error);
+    }
 
-    //TODO:CREATE THE USER IN STREAM AS WELL
-
-    const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" }
+    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: "7d" }
     )
 
     res.cookie("jwt", token, {
@@ -49,15 +57,15 @@ export async function signup(req, res) {
       sameSite: "strict", //prevent CSRF attcks
       secure: process.env.NODE_ENV === "production",
     })
+
     res.status(201).json({ success: true, user: newUser })
+
   } catch (error) {
 
     console.log("Error in signup controller", error),
       res.status(500).json({ message: "Internal Server Error" });
   }
 }
-
-
 
 export async function login(req, res) {
   try {
