@@ -63,13 +63,13 @@ export async function sendFriendRequest(req, res){
 
     //chekc if a req already exists
 
-    const existingRequest = await FriendRequer.findOne({
+    const existingRequest = await FriendRequest.findOne({
       $or:[
         {
           sender:myId, recipient:recipientId
         },
         {
-          sender:recipienrId, recipient:myId
+          sender:recipientId, recipient:myId
         },
       ],
     });
@@ -95,4 +95,43 @@ export async function sendFriendRequest(req, res){
 
   }
 
+}
+
+export async function acceptFriendRequest(req, res){
+  try {
+    const {id:requestId} = req.params;
+
+    const friendRequest = await FriendRequest.findById(requestId);
+
+    if (!friendRequest) {
+      return res.status(404).json({message:"Friend Request not Found"});
+    }
+
+    //Verify the current user is the recipient 
+
+    if (friendRequest.recipient.toString() !==req.user.id){
+      return res.status(403).json({message:"You are not authorijed to accept thius request"})
+    }
+
+    friendRequest.status="accepted";
+    await friendRequest.save();
+
+    //add each user to the other's friends array
+    //$addToSet: adds elements to an array only if theu do ont already exist.
+
+    await User.findByIdAndUpdate(friendRequest.sender, {
+      $addToSet: {friends: friendRequest.recipient},
+    });
+
+    await User.findByIdAndUpdate(friendRequest.recipient, {
+      $addToSet: {friends: friendRequest.sender},
+    });
+    
+    res.send(200).json({message:"Friend request accepted"});
+
+  } catch (error) {
+    console.log("Error in acceptFriendRequesr controller", error.message);
+    res.status(500).json({messae: "Internal Server Error"});
+    
+  }
 }
