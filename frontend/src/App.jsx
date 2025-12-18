@@ -7,11 +7,14 @@ import NotificationsPage from "./pages/NotificationsPage";
 import CallPage from "./pages/CallPage";
 import ChatPage from "./pages/ChatPage";
 import OnboardingPage from "./pages/OnboardingPage";
-import {Toaster} from "react-hot-toast";
+import toast, {Toaster} from "react-hot-toast";
 
 const App = () => {
-  return <div className="h-screen" data-theme="night">
+
   
+
+  return <div className="h-screen" data-theme="night">
+    <button onClick={()=> toast.success("Hello World!")}>Create a toast</button>
 
       <Routes>
         <Route path="/" element={<HomePage/>}/>
@@ -24,7 +27,6 @@ const App = () => {
       </Routes>
 
       <Toaster/>
-
    
     </div>
 };
