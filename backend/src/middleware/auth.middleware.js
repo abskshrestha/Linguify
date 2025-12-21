@@ -6,13 +6,13 @@ export const protectRoute = async (req, res, next) => {
     const token = req.cookies.jwt;
 
     if (!token){
-      return res.send(401).json({message:"Unauthorije - No token Provided"});
+      return res.status(401).json({message:"Unauthorije - No token Provided"});
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
     if (!decoded) {
-      return res.send(401).json({message: "Unauthorijed - Invalid token"});
+      return res.status(401).json({message: "Unauthorijed - Invalid token"});
     }
 
     const user = await User.findById(decoded.userId).select("-password");    
@@ -23,8 +23,7 @@ export const protectRoute = async (req, res, next) => {
 
   } catch (error) {
     console.log("Error in protectRoute middleware", error);
-    res.send(500).json({message:"Internal Server Error"});
-
+    return res.status(500).json({message:"Internal Server Error"});
 
   }
 }

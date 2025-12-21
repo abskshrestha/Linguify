@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { ShipWheel } from 'lucide-react';
 import { Link } from 'react-router';
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { axiosInstance } from "../lib/axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";<div className=""></div>
+
+import { signup } from "../lib/api";
 
 const SignUpPage = () => {
   const [signupData, setSignupData] = useState({
@@ -13,18 +14,15 @@ const SignUpPage = () => {
 
   const queryClient = useQueryClient()
 
-  const {mutate, isPending, error} = useMutation({
-    mutationFn: async () => {
-      const response = await axiosInstance.post("/auth/signup", signupData);
-      return response.data;
-    },
+  const {mutate: signupMutation, isPending, error} = useMutation({
+    mutationFn: signup,
     onSuccess: () => queryClient.invalidateQueries(
-      {queryKey: ["authUser"]})
+      {queryKey: ["authUser"]}),
   });
 
   const handleSignup = (e) => {
     e.preventDefault();
-    mutate();
+    signupMutation(signupData);
   };
 
   return (
@@ -44,6 +42,22 @@ const SignUpPage = () => {
               Linguify
             </span>
           </div>
+
+    
+          {/*Error message if any */}
+
+          {error && (
+            <div className="alert alert-error mb-4">
+              <span>{error.response.data.message}</span>
+            </div>
+          )}
+
+
+
+
+
+
+
 
           <div className="w-full">
             <form onSubmit={handleSignup}>
@@ -113,12 +127,15 @@ const SignUpPage = () => {
                     </label>
                   </div>       
 
-                   {/* Submit Button */}
-                <button
-                  onClick={handleSignup}
-                  className="btn btn-primary w-full"
-                >
-                  {isPending ? "Signing up ..." : " Create Account"}
+                   <button className="btn btn-primary w-full" type="submit">
+                  {isPending ? (
+                    <>
+                      <span className="loading loading-spinner loading-xs"></span>
+                      Loading...
+                    </>
+                  ) : (
+                    "Create Account"
+                  )}
                 </button>
 
                 <div className="text-center mt-4">
