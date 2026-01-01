@@ -127,7 +127,7 @@ export async function onboard(req, res){
 
   const updatedUser = await User.findByIdAndUpdate(userId, {
     ...req.body,
-    isOnBoarded:true,
+    isOnboarded:true,
   }, {new:true}
   )
 
@@ -144,16 +144,10 @@ export async function onboard(req, res){
         console.log("Error updating Stream user during onboarding:", streamError.message);
     }
 
- 
-
-
     res.status(200).json({success:true, user:updatedUser});
 
   } catch (error) {
     console.error("Onboarding error:", error);
     res.status(500).json({message: "Internal Server Error"});
-
-
   }
-  
   }

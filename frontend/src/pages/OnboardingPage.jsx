@@ -5,13 +5,10 @@ import toast from "react-hot-toast";
 import { completeOnboarding } from "../lib/api";
 import { LoaderIcon, MapPinIcon, ShipWheelIcon, ShuffleIcon } from "lucide-react";
 import { LANGUAGES } from "../constants";
-import { useNavigate } from "react-router-dom"; // Add this
 
 const OnboardingPage = () => {
   const { authUser } = useAuthUser();
   const queryClient = useQueryClient();
-
-  const navigate = useNavigate(); // 1. Initialize navigate
 
   const [formState, setFormState] = useState({
     fullName: authUser?.fullName || "",
@@ -26,44 +23,19 @@ const OnboardingPage = () => {
     mutationFn: completeOnboarding,
     onSuccess: () => {
       toast.success("Profile onboarded successfully");
-
-      // 2. Refresh the user data so App.jsx sees 'isOnboarded: true'
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      
-      // 3. Redirect to the Home Page
-      navigate("/"); 
     },
 
-    onError: (error) =>{
+    onError: (error) => {
       toast.error(error.response.data.message);
     },
-
-
-  
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     onboardingMutation(formState);
-
-    
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-    };
+  };
 
   const handleRandomAvatar = () => {
     const idx = Math.floor(Math.random() * 100) + 1; // 1-100 included
@@ -135,7 +107,7 @@ const OnboardingPage = () => {
               />
             </div>
 
-              {/* LANGUAGES */}
+            {/* LANGUAGES */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* NATIVE LANGUAGE */}
               <div className="form-control">
@@ -197,6 +169,7 @@ const OnboardingPage = () => {
             </div>
 
             {/* SUBMIT BUTTON */}
+
             <button className="btn btn-primary w-full" disabled={isPending} type="submit">
               {!isPending ? (
                 <>

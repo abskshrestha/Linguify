@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { ShipWheel } from "lucide-react";
 import { Link } from "react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-<div className=""></div>;
-
-import { signup } from "../lib/api";
+import useSignup from "../hooks/useSignup";
 
 const SignUpPage = () => {
   const [signupData, setSignupData] = useState({
@@ -13,19 +10,22 @@ const SignUpPage = () => {
     password: "",
   });
 
-  const queryClient = useQueryClient();
+  // This is how we did it in the first place without using custome hooks
+  // const queryClient = useQueryClient();
 
-  const {
-    mutate: signupMutation,
-    isPending,
-    error,
-  } = useMutation({
-    mutationFn: signup,
-    onSuccess: () => {
-      // This tells TanStack Query to immediately check if we are now logged in
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
-  });
+  // const {
+  //   mutate: signupMutation,
+  //   isPending,
+  //   error,
+  // } = useMutation({
+  //   mutationFn: signup,
+  //   onSuccess: () => {
+  //     // This tells TanStack Query to immediately check if we are now logged in
+  //     queryClient.invalidateQueries({ queryKey: ["authUser"] });
+  //   },
+  // });
+
+  const {isPending, error, signupMutation} = useSignup();
 
   const handleSignup = (e) => {
     e.preventDefault();
