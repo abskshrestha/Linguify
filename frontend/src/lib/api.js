@@ -9,7 +9,6 @@ export const login = async (loginData) => {
   const response = await axiosInstance.post("/auth/login", loginData);
   return response.data;
 };
-
 export const logout = async () => {
   const response = await axiosInstance.post("/auth/logout");
   return response.data;
@@ -51,7 +50,7 @@ export async function sendFriendRequest(userId) {
 }
 
 export async function getFriendRequests() {
-  const response = await axiosInstance.get(`/users/friend-requests`);
+  const response = await axiosInstance.get("/users/friend-requests");
   return response.data;
 }
 
@@ -60,6 +59,7 @@ export async function acceptFriendRequest(requestId) {
   return response.data;
 }
 
-
-
-
+export async function getStreamToken() {
+  const response = await axiosInstance.get("/chat/token");
+  return response.data;
+}

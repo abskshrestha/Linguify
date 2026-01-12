@@ -20,14 +20,19 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-
 app.use("/api/auth", authRoutes)
 app.use("/api/users", userRoutes);
-app.use("api/chat", chatRoutes);
+app.use("/api/chat", chatRoutes);
 
+// Add this after your middlewares and before app.listen
+app.get('/', (req, res) => {
+  res.status(200).send("Backend is active!");
+});   
 
 app.listen(PORT, ()=>{
   console.log(`Server is running on port ${PORT}`);
   connectDB();
 });
+
+
 

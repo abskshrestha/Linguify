@@ -30,7 +30,7 @@ const FriendCard = ({ friend }) => {
         </Link>
 
 
-      </div>
+      </div>            
     </div>
   );
 };
