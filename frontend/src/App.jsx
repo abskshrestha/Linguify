@@ -12,6 +12,7 @@ import PageLoader from "./components/PageLoader.jsx";
 import useAuthUser from "./hooks/useAuthUser.js";
 import Layout from "./components/Layout.jsx";
 import { useThemeStore } from "./store/useThemeStore.js";
+import { isChannel } from "stream-chat-react";
 
 const App = () => {
   const { isLoading, authUser } = useAuthUser();
@@ -71,8 +72,10 @@ const App = () => {
           }
         />
         <Route
-          path="/call"
-          element={isAuthenticated ? <CallPage /> : <Navigate to={"/login"} />}
+          path="/call/:id"
+          element={isAuthenticated && isOnboarded ? (<CallPage/>) : ( <Navigate to={!isAuthenticated? "/login" : "/onboarding"}/>
+          )
+        }
         />
 
         <Route
