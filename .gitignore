@@ -23,7 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-# Ignore .env files in specific directories only
-/frontend/.env
-/backend/.env
+.env
 
