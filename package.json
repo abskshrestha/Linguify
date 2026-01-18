@@ -1,0 +1,22 @@
+{
+  "name": "linguify",
+  "version": "1.0.0",
+  "description": "usage: git [--version] [--help] [-C <path>] [-c <name>=<value>]            [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]            [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]            [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]            [--super-prefix=<path>] [--config-env=<name>=<envvar>]            <command> [<args>]",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm run start --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abskshrestha/Linguify.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abskshrestha/Linguify/issues"
+  },
+  "homepage": "https://github.com/abskshrestha/Linguify#readme"
+}
